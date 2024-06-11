@@ -16,31 +16,51 @@ state = {
     "pump-in": 2,
     "pump-out": 2,
     "time-start": "19:23",
-    "active": 0,
+    "active": 1,
 }
 
-sched_active = []
+sched_active = [{
+    "next-cycle": 2,
+    "mixer1": 3,
+    "mixer2": 3,
+    "mixer3": 3,
+    "selector": None,
+    "pump-in": 3,
+    "pump-out": 3,
+    "time-start": "12:02",
+    "active": 1,
+}]
 
 def data_callback(feed_id, payload):
     key = feed_id
     print("Received payload:", payload)
-    if key == "next-cycle":
-        try:
-            state["next-cycle"] = payload['cycles']
-            time_start = payload['time-start']
-            if len(time_start) == 4:
-                formatted_time_start = f"{time_start[:2]}:{time_start[2:]}" 
-                state["time-start"] = formatted_time_start
-                print(f"Updated {key} to {payload['cycles']} cycles and cooldown time to {formatted_time_start}")
+
+    try:
+        # Nếu payload là một chuỗi JSON
+        if isinstance(payload, str) and payload.startswith("{") and payload.endswith("}"):
+            new_schedule = json.loads(payload)
+
+            # Kiểm tra nếu new_schedule chứa tất cả các khóa cần thiết
+            required_keys = {"next-cycle", "mixer1", "mixer2", "mixer3", "selector", "pump-in", "pump-out", "time-start", "active"}
+            if required_keys.issubset(new_schedule.keys()):
+                # Định dạng lại time-start nếu cần
+                time_start = new_schedule["time-start"]
+                if len(time_start) == 4:
+                    new_schedule["time-start"] = f"{time_start[:2]}:{time_start[2:]}"
+                
+                # Thêm lịch trình mới vào sched_active
+                sched_active.append(new_schedule)
+                print("New schedule added to sched_active:", new_schedule)
             else:
-                print("Invalid time format for time-start:", time_start)
-        except ValueError:
-            print("Invalid payload format for next-cycle:", payload)
-    elif key in state:
-        state[key] = payload
-        print(f"Updated {key} to {state[key]}")
-    else:
-        print(f"No handler found for feed: {feed_id}")
+                print("Invalid schedule format:", new_schedule)
+        elif key in state:
+            state[key] = payload
+            print(f"Updated {key} to {state[key]}")
+        else:
+            print(f"No handler found for feed: {feed_id}")
+    except Exception as e:
+        print(f"Error processing payload: {e}")
+
 
 def main_loop():
     start_sched = fsm.FarmScheduler()
