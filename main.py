@@ -85,7 +85,6 @@ def data_callback(feed_id, payload):
 def main_loop():
     start_sched = fsm.FarmScheduler()
     while True:
-        print(state)
         if state["active"] == 1:
             sched_active.append(state.copy())
             print("Activated new schedule!")
@@ -113,7 +112,7 @@ def publish_data(client):
         # client.publish(feed_id2, readMoisture())
         print(f"Published {value1} to {feed_id1}")
         print(f"Published {value2} to {feed_id2}")
-        time.sleep(5)  # Wait for 5 seconds before publishing next data
+        time.sleep(10)  # Wait for 5 seconds before publishing next data
 
 # Initialize the Adafruit MQTT client and set the callback
 adafruit_client = Adafruit_MQTT()
