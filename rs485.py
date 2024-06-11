@@ -112,30 +112,3 @@ if __name__ == '__main__':
         print("Soil moisture: ", physic.readSensors("soil_moisture"))  # Read and print soil moisture
         time.sleep(5)
 
-
-# def readSerial(client):
-#     print("Temp:")
-#     client.publish("cambien1", readTemperature())
-#     time.sleep(2)
-#     print("Mois:")
-#     client.publish("cambien2", readMoisture())
-
-# while True:
-
-#     setDevice(True, 4)
-
-#     time.sleep(2)
-
-#     setDevice(False, 4)
-
-#     time.sleep(2)
-
-# #    print("TEST SENSOR")
-
-# #    print(readMoisture())
-
-# #    time.sleep(1)
-
-# #    print(readTemperature())
-
-# #    time.sleep(1)
