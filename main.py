@@ -15,28 +15,18 @@ state = {
     "selector": None,
     "pump-in": 2,
     "pump-out": 2,
-    "time-start": "19:23",
+    "time-start": "11:23",
     "active": 1,
 }
 
-sched_active = [{
-    "next-cycle": 2,
-    "mixer1": 3,
-    "mixer2": 3,
-    "mixer3": 3,
-    "selector": None,
-    "pump-in": 3,
-    "pump-out": 3,
-    "time-start": "12:02",
-    "active": 1,
-}]
+sched_active = []
 
 def data_callback(feed_id, payload):
     key = feed_id
     print("Received payload:", payload)
     
     try:
-        if isinstance(payload, str) and payload.startswith("{") and payload.endswith("}"):
+        if isinstance(payload, dict):
             new_schedule = json.loads(payload)
             
             required_keys = {"next-cycle", "mixer1", "mixer2", "mixer3", "selector", "pump-in", "pump-out", "time-start", "active"}
@@ -58,7 +48,6 @@ def data_callback(feed_id, payload):
     except Exception as e:
         print(f"Error processing payload: {e}")
 
-scheduler = FarmScheduler()
 
 
 def main_loop():
