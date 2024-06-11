@@ -19,11 +19,13 @@ class FarmScheduler():
         while True:
             if not self.current_schedule:
                 self.current_schedule = self.check_schedule()
+                print("Lich trinh hien tai",current_schedule)
                 if not self.current_schedule:
                     time.sleep(1)  # Sleep briefly to avoid busy waiting
                     continue
 
             self.current_state = self.current_state.execute(self.current_schedule)
+            print("trang thai hien tai",current_state)
             if isinstance(self.current_state, IdleState) and self.current_schedule['next-cycle'] <= 0:
                 self.schedules.pop(0)   
                 print("Cycle complete, checking for new schedules.")
