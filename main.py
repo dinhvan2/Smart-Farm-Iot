@@ -34,23 +34,20 @@ sched_active = [{
 def data_callback(feed_id, payload):
     key = feed_id
     print("Received payload:", payload)
-
+    
     try:
-        # Nếu payload là một chuỗi JSON
         if isinstance(payload, str) and payload.startswith("{") and payload.endswith("}"):
             new_schedule = json.loads(payload)
-
-            # Kiểm tra nếu new_schedule chứa tất cả các khóa cần thiết
+            
             required_keys = {"next-cycle", "mixer1", "mixer2", "mixer3", "selector", "pump-in", "pump-out", "time-start", "active"}
             if required_keys.issubset(new_schedule.keys()):
-                # Định dạng lại time-start nếu cần
                 time_start = new_schedule["time-start"]
                 if len(time_start) == 4:
                     new_schedule["time-start"] = f"{time_start[:2]}:{time_start[2:]}"
                 
-                # Thêm lịch trình mới vào sched_active
-                sched_active.append(new_schedule)
-                print("New schedule added to sched_active:", new_schedule)
+                # Thêm lịch trình mới vào FarmScheduler
+                scheduler.add_schedule(new_schedule)
+                print("New schedule added:", new_schedule)
             else:
                 print("Invalid schedule format:", new_schedule)
         elif key in state:
@@ -60,6 +57,8 @@ def data_callback(feed_id, payload):
             print(f"No handler found for feed: {feed_id}")
     except Exception as e:
         print(f"Error processing payload: {e}")
+
+scheduler = FarmScheduler()
 
 
 def main_loop():
