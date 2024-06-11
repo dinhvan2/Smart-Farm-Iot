@@ -85,8 +85,8 @@ def publish_data(client):
         # Publish random data to a feed
         feed_id1 = "assignment.temperature"  # Example feed ID
         feed_id2 = "assignment.humidity"
-        value1 = sensor.readSensors("soil_temperature")  # Example temperature value
-        value2 = sensor.readSensors("soil_moisture") 
+        value1 = sensor.readSensors("soil_temperature")/100  # Example temperature value
+        value2 = sensor.readSensors("soil_moisture")/100 
         client.publish(feed_id1, value1)
         client.publish(feed_id2, value2)
         # client.publish(feed_id1, readTemperature())
