@@ -16,6 +16,7 @@ class FarmScheduler():
     def run(self):
         while True:
             print(self.schedules)
+            self.print_schedules()
             if not self.current_schedule:
                 self.current_schedule = self.check_schedule()
                 if not self.current_schedule:
@@ -30,7 +31,10 @@ class FarmScheduler():
                 break
 
             time.sleep(1)  # Main loop tick rate
-
+    def print_schedules(self):
+        print("Current schedules:")
+        for idx, schedule in enumerate(self.schedules, start=1):
+            print(f"Schedule {idx}: {schedule}")
     def add_schedule(self, schedule):
         self.schedules.append(schedule)
 
@@ -42,12 +46,6 @@ class FarmScheduler():
             if start_time <= now:
                 return schedule
         return None
-
-    # def check_schedule(self):
-    #     # Find a schedule with start time in the future
-    #     for schedule in self.schedules:
-    #         return schedule
-    #     return None
 
 class State:
     def __init__(self, debug=True):
