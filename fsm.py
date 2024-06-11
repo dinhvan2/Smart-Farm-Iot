@@ -37,6 +37,7 @@ class FarmScheduler():
             print(f"Schedule {idx}: {schedule}")
     def add_schedule(self, schedule):
         self.schedules.append(schedule)
+        print("Add schedule is successful")
 
     def check_schedule(self):
         # Find a schedule with start time in the future
