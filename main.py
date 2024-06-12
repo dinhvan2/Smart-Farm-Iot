@@ -19,39 +19,7 @@ state = {
     "active": 1,
 }
 
-sched_active = [{
-    "next-cycle": 1,
-    "mixer1": 2,
-    "mixer2": 2,
-    "mixer3": 2,
-    "selector": None,
-    "pump-in": 2,
-    "pump-out": 2,
-    "time-start": "19:30",
-    "active": 1,
-},
-               {
-    "next-cycle": 1,
-    "mixer1": 2,
-    "mixer2": 2,
-    "mixer3": 2,
-    "selector": None,
-    "pump-in": 2,
-    "pump-out": 2,
-    "time-start": "11:23",
-    "active": 1,
-}
-               {
-    "next-cycle": 1,
-    "mixer1": 2,
-    "mixer2": 2,
-    "mixer3": 2,
-    "selector": None,
-    "pump-in": 2,
-    "pump-out": 2,
-    "time-start": "11:23",
-    "active": 1,
-}]
+sched_active = []
 
 def data_callback(feed_id, payload):
     key = feed_id
@@ -68,7 +36,7 @@ def data_callback(feed_id, payload):
                     new_schedule["time-start"] = f"{time_start[:2]}:{time_start[2:]}"
                 
                 # Thêm lịch trình mới vào FarmScheduler
-                scheduler.add_schedule(new_schedule)
+                sched_active.append(new_schedule)
                 print("New schedule added:", new_schedule)
             else:
                 print("Invalid schedule format:", new_schedule)
